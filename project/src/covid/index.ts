@@ -1,4 +1,4 @@
-interface Country {
+export interface Country {
   Country: string;
   CountryCode: string;
   date: string;
@@ -28,3 +28,19 @@ export interface CovidSummaryResponse {
   Global: Global;
   Message: string;
 }
+
+interface CountrySummaryInfo {
+  Country: string;
+  CountryCode: string;
+  Province: string;
+  City: string;
+  CityCode: string;
+  Lat: string;
+  Lon: string;
+  Cases: number;
+  Status: string;
+  Date: string;
+}
+
+export type CountrySummaryResponse = CountrySummaryInfo[];
+// option 키가 단어별 커서 이동
