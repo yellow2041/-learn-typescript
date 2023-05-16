@@ -44,3 +44,4 @@ interface CountrySummaryInfo {
 
 export type CountrySummaryResponse = CountrySummaryInfo[];
 // option 키가 단어별 커서 이동
+// test
