@@ -29,7 +29,7 @@ export interface CovidSummaryResponse {
   Message: string;
 }
 
-interface CountrySummaryInfo {
+export interface CountrySummaryInfo {
   Country: string;
   CountryCode: string;
   Province: string;
@@ -39,9 +39,8 @@ interface CountrySummaryInfo {
   Lon: string;
   Cases: number;
   Status: string;
-  Date: string;
+  Date: Date;
 }
 
 export type CountrySummaryResponse = CountrySummaryInfo[];
 // option 키가 단어별 커서 이동
-// test
