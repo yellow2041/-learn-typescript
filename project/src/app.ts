@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { Chart } from 'chart.js';
+import Chart from 'chart.js';
 // 타입 모듈
 import {
   Country,
@@ -13,7 +13,7 @@ function $(selector: string) {
   return document.querySelector(selector);
 }
 
-function getUnixTimestamp(date: Date) {
+function getUnixTimestamp(date: Date | string) {
   // Date, string, number 모두 가능. 개인 취향햣
   return new Date(date).getTime();
 }
@@ -29,7 +29,7 @@ const recoveredList = $('.recovered-list');
 const deathSpinner = createSpinnerElement('deaths-spinner');
 const recoveredSpinner = createSpinnerElement('recovered-spinner');
 
-function createSpinnerElement(id: any) {
+function createSpinnerElement(id: string) {
   const wrapperDiv = document.createElement('div');
   wrapperDiv.setAttribute('id', id);
   wrapperDiv.setAttribute(
@@ -46,7 +46,6 @@ function createSpinnerElement(id: any) {
 
 // state
 let isDeathLoading = false;
-const isRecoveredLoading = false;
 
 // api
 function fetchCovidSummary(): Promise<AxiosResponse<CovidSummaryResponse>> {
@@ -124,11 +123,11 @@ function setDeathsList(data: CountrySummaryResponse) {
     (a: CountrySummaryInfo, b: CountrySummaryInfo) =>
       getUnixTimestamp(b.Date) - getUnixTimestamp(a.Date)
   );
-  sorted.forEach((value: any) => {
+  sorted.forEach((value: CountrySummaryInfo) => {
     const li = document.createElement('li');
     li.setAttribute('class', 'list-item-b flex align-center');
     const span = document.createElement('span');
-    span.textContent = value.Cases;
+    span.textContent = value.Cases.toString();
     span.setAttribute('class', 'deaths');
     const p = document.createElement('p');
     p.textContent = new Date(value.Date).toLocaleDateString().slice(0, -1);
@@ -142,8 +141,8 @@ function clearDeathList() {
   deathsList.innerHTML = null;
 }
 
-function setTotalDeathsByCountry(data: any) {
-  deathsTotal.innerText = data[0].Cases;
+function setTotalDeathsByCountry(data: CountrySummaryResponse) {
+  deathsTotal.innerText = data[0].Cases.toString();
 }
 
 function setRecoveredList(data: CountrySummaryResponse) {
@@ -193,7 +192,8 @@ async function setupData() {
 }
 
 function renderChart(data: number[], labels: string[]) {
-  const ctx = $('#lineChart').getContext('2d');
+  const lineChart = $('#lineChart') as HTMLCanvasElement;
+  const ctx = lineChart.getContext('2d');
   Chart.defaults.global.defaultFontColor = '#f5eaea';
   Chart.defaults.global.defaultFontFamily = 'Exo 2';
   new Chart(ctx, {
